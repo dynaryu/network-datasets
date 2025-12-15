@@ -138,7 +138,7 @@ def eval_travel_time_to_nearest(
     destinations: Iterable[str],
     *,
     avg_speed: float = 60.0,        # distance units per hour (e.g., km/h)
-    target_max: float = 0.5,        # allowed extra time over baseline, in HOURS
+    target_max: float | list = 0.5,        # allowed extra time over baseline, in HOURS
     length_attr: str = "length",    # edge length attribute (e.g., km)
 ) -> Tuple[Optional[float], int, Dict[str, Any]]:
     dest_set = set(destinations)
@@ -282,7 +282,7 @@ def eval_population_accessibility(
     target_time_max: float = 0.5,   # allowed extra time over baseline [hours]
     avg_speed: float = 60.0,        # distance units per hour (e.g. km/h)
     length_attr: str = "length",
-    target_pop_max: float = 0.7,
+    target_pop_max: float | list = 0.7,
     population_attr: str = "population",
 ) -> Tuple[Optional[float], int, Dict[str, Any]]:
     """
@@ -420,7 +420,18 @@ def eval_population_accessibility(
         return None, 0, {"reason": "total_population_zero"}
 
     connected_ratio = connected_pop / total_pop
-    system_state = 1 if connected_ratio >= target_pop_max else 0
+
+    # ----- Threshold check (scalar or multi-level) -----
+    if isinstance(target_pop_max, float):
+        target_pop_max = [target_pop_max]
+
+    # ensure sorted thresholds (important)
+    target_pop_max = sorted(float(p) for p in target_pop_max)
+
+    system_state = next(
+        (i for i, p in enumerate(target_pop_max) if connected_ratio < p),
+        len(target_pop_max)
+    )
 
     # --------------------------------------------------
     # Diagnostics

@@ -293,3 +293,44 @@ def test_eval_population_accessibility3():
         assert details['node_details'][n]['within_threshold'] == True, f"Expected node {n} to be reachable"
     for n in ['n5', 'n7']:
         assert n not in details['node_details'], f"Expected destination node {n} to be skipped"
+
+def test_eval_population_accessibility4():
+    # multi-state system; rest remains the same as test_eval_population_accessibility3
+
+    nodes, edges, probs = load_dataset_any("datasets/toynet_11edges/v1/data")
+    G_base = build_base_graph(nodes, edges)
+
+    comps_st = {eid: 1 for eid in edges}  
+    comps_st['e05'], comps_st['e07'] = 0, 0  # failed components
+
+    destinations = ['n5', 'n7']
+
+    connected_ratio, sys_st, details = fun_binary_graph.eval_population_accessibility(
+        comps_st, G_base, destinations, avg_speed=1.0,
+        target_time_max=0.5, #  it shouldn't take longer than 0.5 hours more than original shortest time
+        target_pop_max=[0.3, 0.7], # system state 0: if less than 30% population reaches destination within target time
+        # state 1: if 30%<= <70% population reaches destination within target time; else state 2
+    )
+
+    expected = (110.0 - 10.0 - 20.0 - 20.0 - 20.0)/110.0 # disconnected: n1-n4, connected: n6, n8
+    assert np.isclose(connected_ratio, expected), f"Expected connected_ratio {expected}, got {connected_ratio}"
+    assert sys_st == 1, f"Expected system state 1, got '{sys_st}'"
+
+def test_eval_population_accessibility5():
+    # another check for multi-state systems; rest remains the same as test_eval_population_accessibility1
+    nodes, edges, probs = load_dataset_any("datasets/toynet_11edges/v1/data")
+    G_base = build_base_graph(nodes, edges)
+
+    comps_st = {eid: 1 for eid in edges}  # all components survive
+    destinations = ['n5', 'n7']
+
+    connected_ratio, sys_st, details = fun_binary_graph.eval_population_accessibility(
+        comps_st, G_base, destinations, avg_speed=1.0,
+        target_time_max=0.5, #  it shouldn't take longer than 0.5 hours more than original shortest time
+        length_attr="length",
+        target_pop_max=[0.7, 1.0], # at least 70% of population should reach destination within target time
+        population_attr="population"
+    )
+
+    assert np.isclose(connected_ratio, 1.0), f"Expected connected_ratio 1.0, got {connected_ratio}"
+    assert sys_st == 2, f"Expected system state 2, got '{sys_st}'"
