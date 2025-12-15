@@ -9,3 +9,6 @@
 - Documentation:
   - Dataset card (`README.md`)
   - Provenance (`PROVENANCE.md`)
+
+## v1.0.1 (2025-12-15)
+- Updated `nodes.json` to include `demand` attribute for each node.
