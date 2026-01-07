@@ -55,9 +55,6 @@ conda activate <your-env>
 pip install -e .
 ```
 
-This links the local source code into your environment, so changes are picked up
-immediately without reinstallation.
-
 ---
 
 ### Run tests (developers)
