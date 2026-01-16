@@ -28,7 +28,7 @@
     "license": "CC-BY-4.0"
   },
   {
-    "name": "process-plants-toy",
+    "name": "process-plant-toy",
     "version": "1.0.0",
     "path": "datasets/process_plants/toy/v1",
     "summary": "A small toy process plant network.",

@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 
 # === GMPE coefficients (T = 1.0 s) ===
-# for Eastern North America (c.f. K. W. Campbell, Prediction of strong ground motion using the hybrid empirical method and its use in the development of ground-motion (attenuation) relations in eastern north america, Bulletin of the Seismological Society of America 93 (2003) 1012–1033.)
+# for Eastern North America (Reference: K. W. Campbell, Prediction of strong ground motion using the hybrid empirical method and its use in the development of ground-motion (attenuation) relations in eastern north america, Bulletin of the Seismological Society of America 93 (2003) 1012–1033. https://doi.org/10.1785/0120020002)
 GMPE_COEFFS = dict(
     c1=-0.6104,
     c2=0.451,
