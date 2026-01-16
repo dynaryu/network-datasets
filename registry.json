@@ -26,5 +26,12 @@
     "path": "datasets/generated-examples/v1",
     "summary": "Collection of synthetic example datasets generated with ndtools.network_generator. See generated/README.md and PROVENANCE.md for details.",
     "license": "CC-BY-4.0"
+  },
+  {
+    "name": "process-plants-toy",
+    "version": "1.0.0",
+    "path": "datasets/process_plants/toy/v1",
+    "summary": "A small toy process plant network.",
+    "license": "CC-BY-4.0"
   }  
 ]
