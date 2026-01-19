@@ -6,6 +6,7 @@
     - `data/nodes.json` 
     - `data/edges.json` 
     - `data/probs.json` 
+    - `data/network.png`
 - Documentation:
     - `README.md`
     - `PROVENANCE.md`

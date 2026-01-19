@@ -24,6 +24,9 @@ Reference: Byun, J. and Lee, S. (2026). "A New System Function for Maximum Proce
     "x9": {"0": {"p": 0.1, "remaining_capacity_ratio": 0.0}, "1": {"p": 0.9, "remaining_capacity_ratio": 1.0}}
     ```
 
+  - `data/network.png`
+    Schematic diagram of the toy process plant network.
+
 ## Notes
 - This example is used in Byun and Lee (2026) to illustrate the staged maximum flow method for process plant networks.
 - The data is compatible with ndtools.staged_max_flow; for usage, refer to tests/test_staged_max_flow.py.

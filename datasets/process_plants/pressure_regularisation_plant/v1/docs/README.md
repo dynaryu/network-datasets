@@ -24,6 +24,9 @@ Reference: Byun, J. and Lee, S. (2026). "A New System Function for Maximum Proce
     "x9": {"0": {"p": 0.1, "remaining_capacity_ratio": 0.0}, "1": {"p": 0.9, "remaining_capacity_ratio": 1.0}}
     ```
 
+  - `data/network.png`
+    Schematic diagram of the pressure regularisation plant network.
+
 ## Notes
 - The unit of capacity for nodes and edges are t / hr.
 - This example is used as an example in Byun and Lee (2026).
