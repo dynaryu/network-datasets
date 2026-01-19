@@ -288,5 +288,265 @@
             4
         ],
         "comp_id": "x42"
+    },
+    "e30": {
+        "from": "n26",
+        "to": "n28",
+        "directed": true,
+        "capacity": 595,
+        "transition_start_stage": [
+            1
+        ],
+        "comp_id": "x55"
+    },
+    "e31": {
+        "from": "n27",
+        "to": "n28",
+        "directed": true,
+        "capacity": 595,
+        "transition_start_stage": [
+            1
+        ],
+        "comp_id": "x56"
+    },
+    "e32": {
+        "from": "n28",
+        "to": "n5",
+        "directed": true,
+        "capacity": 595,
+        "transition_start_stage": [
+            1
+        ],
+        "comp_id": "x57"
+    },
+    "e33": {
+        "from": "n6",
+        "to": "n29",
+        "directed": true,
+        "capacity": 210,
+        "transition_start_stage": [
+            1
+        ],
+        "comp_id": "x58"
+    },
+    "e34": {
+        "from": "n6",
+        "to": "n30",
+        "directed": true,
+        "capacity": 210,
+        "transition_start_stage": [
+            1
+        ],
+        "comp_id": "x59"
+    },
+    "e35": {
+        "from": "n6",
+        "to": "n31",
+        "directed": true,
+        "capacity": 90,
+        "transition_start_stage": [
+            1
+        ],
+        "comp_id": "x60"
+    },
+    "e36": {
+        "from": "n29",
+        "to": "n32",
+        "directed": true,
+        "capacity": 210,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x61"
+    },
+    "e37": {
+        "from": "n30",
+        "to": "n32",
+        "directed": true,
+        "capacity": 210,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x62"
+    },
+    "e38": {
+        "from": "n31",
+        "to": "n32",
+        "directed": true,
+        "capacity": 90,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x63"
+    },
+    "e39": {
+        "from": "n32",
+        "to": "n33",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x64"
+    },
+    "e40": {
+        "from": "n33",
+        "to": "n34",
+        "directed": true,
+        "capacity": 30,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x65"
+    },
+    "e41": {
+        "from": "n33",
+        "to": "n35",
+        "directed": true,
+        "capacity": 30,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x66"
+    },
+    "e42": {
+        "from": "n33",
+        "to": "n36",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x67"
+    },
+    "e43": {
+        "from": "n33",
+        "to": "n37",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x68"
+    },
+    "e44": {
+        "from": "n33",
+        "to": "n38",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            2
+        ],
+        "comp_id": "x69"
+    },
+    "e45": {
+        "from": "n34",
+        "to": "n39",
+        "directed": true,
+        "capacity": 30,
+        "transition_start_stage": [
+            3
+        ],
+        "comp_id": "x70"
+    },
+    "e46": {
+        "from": "n35",
+        "to": "n39",
+        "directed": true,
+        "capacity": 30,
+        "transition_start_stage": [
+            3
+        ],
+        "comp_id": "x71"
+    },
+    "e47": {
+        "from": "n36",
+        "to": "n40",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            3
+        ],
+        "comp_id": "x72"
+    },
+    "e48": {
+        "from": "n37",
+        "to": "n40",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            3
+        ],
+        "comp_id": "x73"
+    },
+    "e49": {
+        "from": "n38",
+        "to": "n40",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            3
+        ],
+        "comp_id": "x74"
+    },
+    "e50": {
+        "from": "n39",
+        "to": "n41",
+        "directed": true,
+        "capacity": 30,
+        "transition_start_stage": [
+            3
+        ],
+        "comp_id": "x75"
+    },
+    "e51": {
+        "from": "n40",
+        "to": "n42",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            3
+        ],
+        "comp_id": "x76"
+    },
+    "e52": {
+        "from": "n41",
+        "to": "n43",
+        "directed": true,
+        "capacity": 30,
+        "transition_start_stage": [
+            4
+        ],
+        "comp_id": "x77"
+    },
+    "e53": {
+        "from": "n42",
+        "to": "n44",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            4
+        ],
+        "comp_id": "x78"
+    },
+    "e54": {
+        "from": "n43",
+        "to": "n23",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            4
+        ],
+        "comp_id": "x79"
+    },
+    "e55": {
+        "from": "n44",
+        "to": "n43",
+        "directed": true,
+        "capacity": 420,
+        "transition_start_stage": [
+            4
+        ],
+        "comp_id": "x80"
     }
 }

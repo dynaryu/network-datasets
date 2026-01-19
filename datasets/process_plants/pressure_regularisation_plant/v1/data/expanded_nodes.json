@@ -173,5 +173,138 @@
     "station_stage": 5,
     "capacity": 55,
     "comp_id": "x13"
+  },
+  "n26": {
+    "x": 17.72,
+    "y": -42.07,
+    "station_stage": 1,
+    "capacity": 595,
+    "comp_id": "x43"
+  },
+  "n27": {
+    "x": 17.72,
+    "y": -67.78,
+    "station_stage": 1,
+    "capacity": 595,
+    "comp_id": "x44"
+  },
+  "n28": {
+    "x": 63.98,
+    "y": -124.72,
+    "station_stage": null,
+    "capacity": 595,
+    "comp_id": null
+  },
+  "n29": {
+    "x": 52.92,
+    "y": -122.39,
+    "station_stage": 2,
+    "capacity": 210,
+    "comp_id": "x45"
+  },
+  "n30": {
+    "x": 52.92,
+    "y": -142.43,
+    "station_stage": 2,
+    "capacity": 210,
+    "comp_id": "x46"
+  },
+  "n31": {
+    "x": 52.92,
+    "y": -162.47,
+    "station_stage": 2,
+    "capacity": 90,
+    "comp_id": "x47"
+  },
+  "n32": {
+    "x": 286.06,
+    "y": -299.03,
+    "station_stage": null,
+    "capacity": 420,
+    "comp_id": null
+  },
+  "n33": {
+    "x": 334.27,
+    "y": -299.03,
+    "station_stage": null,
+    "capacity": 420,
+    "comp_id": null
+  },
+  "n34": {
+    "x": 241.78,
+    "y": -116.92,
+    "station_stage": 3,
+    "capacity": 30,
+    "comp_id": "x48"
+  },
+  "n35": {
+    "x": 241.78,
+    "y": -133.93,
+    "station_stage": 3,
+    "capacity": 30,
+    "comp_id": "x49"
+  },
+  "n36": {
+    "x": 241.78,
+    "y": -150.93,
+    "station_stage": 3,
+    "capacity": 420,
+    "comp_id": "x50"
+  },
+  "n37": {
+    "x": 241.78,
+    "y": -167.94,
+    "station_stage": 3,
+    "capacity": 420,
+    "comp_id": "x51"
+  },
+  "n38": {
+    "x": 241.78,
+    "y": -184.95,
+    "station_stage": 3,
+    "capacity": 420,
+    "comp_id": "x52"
+  },
+  "n39": {
+    "x": 522.03,
+    "y": -265.02,
+    "station_stage": null,
+    "capacity": 30,
+    "comp_id": null
+  },
+  "n40": {
+    "x": 522.03,
+    "y": -350.06,
+    "station_stage": null,
+    "capacity": 42,
+    "comp_id": null
+  },
+  "n41": {
+    "x": 334.65,
+    "y": -125.42,
+    "station_stage": 4,
+    "capacity": 30,
+    "comp_id": "x53"
+  },
+  "n42": {
+    "x": 334.65,
+    "y": -167.94,
+    "station_stage": 4,
+    "capacity": 420,
+    "comp_id": "x54"
+  },
+  "n43": {
+    "x": 707.77,
+    "y": -265.02,
+    "station_stage": null,
+    "capacity": 450,
+    "comp_id": null
+  },
+  "n44": {
+    "x": 707.77,
+    "y": -350.06,
+    "station_stage": null,
+    "capacity": 420,
+    "comp_id": null
   }
 }
