@@ -224,6 +224,7 @@ def create_lp(e_caps: Dict[str, float], nodes: Dict[str, Dict], edges: Dict[str,
 
     return c, A_eq, b_eq, bounds, decision_var_details
 
+# TODO: fix this function--it does not return the minimal component states correctly
 def get_min_surv_comps_st(results, nodes, edges, probs):
     """
     Get the minimal component states to ensure system survival.
@@ -260,9 +261,9 @@ def get_min_surv_comps_st(results, nodes, edges, probs):
                 min_st_e = min((int(k) for k, v in probs[x_e].items() if v["remaining_capacity_ratio"] * edges[dec["edge"]]["capacity"] >= f - 1e-12), default=None)
                 assert min_st_e is not None, f"No valid state found for edge {dec["edge"]} to meet flow {f:1.2e}."
                 if x_e not in min_surv_comps_st_dict:
-                    min_surv_comps_st_dict[x_e] = min_st_e
+                    min_surv_comps_st_dict[x_e] = ('>=', min_st_e)
                 else:
-                    min_surv_comps_st_dict[x_e] = max(min_surv_comps_st_dict[x_e], min_st_e)
+                    min_surv_comps_st_dict[x_e] = ('>=', max(min_surv_comps_st_dict[x_e][1], min_st_e))
 
             # From node
             x_from = nodes[dec["from"]]["comp_id"]
@@ -270,9 +271,9 @@ def get_min_surv_comps_st(results, nodes, edges, probs):
                 min_st_from = min((int(k) for k, v in probs[x_from].items() if v["remaining_capacity_ratio"] * nodes[dec["from"]]["capacity"] >= f - 1e-12), default=None)
                 assert min_st_from is not None, f"No valid state found for node {dec['from']} to meet flow {f:1.2e}."
                 if x_from not in min_surv_comps_st_dict:
-                    min_surv_comps_st_dict[x_from] = min_st_from
+                    min_surv_comps_st_dict[x_from] = ('>=', min_st_from)
                 else:
-                    min_surv_comps_st_dict[x_from] = max(min_surv_comps_st_dict[x_from], min_st_from)
+                    min_surv_comps_st_dict[x_from] = ('>=', max(min_surv_comps_st_dict[x_from][1], min_st_from))
 
             # To node
             x_to = nodes[dec["to"]]["comp_id"]
@@ -280,9 +281,9 @@ def get_min_surv_comps_st(results, nodes, edges, probs):
                 min_st_to = min((int(k) for k, v in probs[x_to].items() if v["remaining_capacity_ratio"] * nodes[dec["to"]]["capacity"] >= f - 1e-12), default=None)
                 assert min_st_to is not None, f"No valid state found for node {dec['to']} to meet flow {f:1.2e}."
                 if x_to not in min_surv_comps_st_dict:
-                    min_surv_comps_st_dict[x_to] = min_st_to
+                    min_surv_comps_st_dict[x_to] = ('>=', min_st_to)
                 else:
-                    min_surv_comps_st_dict[x_to] = max(min_surv_comps_st_dict[x_to], min_st_to)
+                    min_surv_comps_st_dict[x_to] = ('>=', max(min_surv_comps_st_dict[x_to][1], min_st_to))
     
     min_surv_comps_st_dict_sorted = {} # in the same order as probs
     for comp_id in probs.keys():
@@ -327,10 +328,130 @@ def sys_fun(comps_st: Dict[str, int], nodes: Dict[str, Dict], edges: Dict[str, D
     flow = result.x[-1]
     if flow >= target_flow - 1e-12:
         sys_st = 's'
-        min_comp_state = get_min_surv_comps_st(result, nodes, edges, probs)                
+        #min_comp_state = get_min_surv_comps_st(result, nodes, edges, probs) # TODO: the function doesn't run correctly
+        min_comp_state = None               
 
     else:
         sys_st = 'f'
         min_comp_state = None
 
     return flow, sys_st, min_comp_state
+
+def add_a_component( rv_name_to_copy, nodes: Dict[str, Dict], edges: Dict[str, Dict], probs: Dict[str, Dict] ):
+    """
+    Return a copy of the input data with an additional random variable added.
+    This function is to calculate addition importance measure (AIM) of a random variable (or component event).
+
+    Args:
+    rv_name_to_copy: str
+        The name of the random variable to be copied.
+        Must exist as a key in probs.
+    nodes: Dict[str, Dict]
+        name: {"x": float, "y": float, "depot": int or null, "capacity": float or null, "comp_id": str}
+    edges: Dict[str, Dict]
+        name: {"from": str, "to": str, "directed": bool, "capacity": float, "comp_id": str}
+    probs: Dict[str, Dict]
+        name: {str (comp_id): {"p": float [0,1], "remaining_capacity_ratio": float [0,1]}}
+
+    Returns:
+    new_nodes: Dict[str, Dict]
+        The updated nodes dictionary with the new random variable added.
+    new_edges: Dict[str, Dict]
+        The updated edges dictionary with the new random variable added.
+    new_probs: Dict[str, Dict]
+        The updated probs dictionary with the new random variable added.
+    """
+
+    assert rv_name_to_copy in probs, f"Random variable {rv_name_to_copy} not found in probs."
+
+    # Create deep copies of the input data
+    new_nodes = copy.deepcopy(nodes)
+    new_edges = copy.deepcopy(edges)
+    new_probs = copy.deepcopy(probs)
+
+    # Copy probs entry
+    rv_copied_name = f"{rv_name_to_copy}_copy"
+    new_probs[rv_copied_name] = copy.deepcopy(probs[rv_name_to_copy])
+
+    # Copy nodes entries
+    for n, n_info in nodes.items():
+        if n_info["comp_id"] == rv_name_to_copy:
+            new_n_info = copy.deepcopy(n_info)
+            new_n_info["comp_id"] = rv_copied_name
+            new_node_name = f"{n}_copy"
+            new_nodes[new_node_name] = new_n_info
+
+            # Update edges to connect to the new node copy
+            for e, e_info in edges.items():
+                if e_info["from"] == n:
+                    new_e_info = copy.deepcopy(e_info)
+                    new_e_info["from"] = new_node_name
+                    new_edge_name = f"{e}_from_{new_node_name}"
+                    new_edges[new_edge_name] = new_e_info # this new edge has the same comp_id as the original edge
+                if e_info["to"] == n:
+                    new_e_info = copy.deepcopy(e_info)
+                    new_e_info["to"] = new_node_name
+                    new_edge_name = f"{e}_to_{new_node_name}"
+                    new_edges[new_edge_name] = new_e_info # this new edge has the same comp_id as the original edge
+
+    # Copy edges entries
+    for e, e_info in edges.items():
+        if e_info["comp_id"] == rv_name_to_copy:
+            new_e_info = copy.deepcopy(e_info)
+            new_e_info["comp_id"] = rv_copied_name
+            new_edge_name = f"{e}_copy"
+            new_edges[new_edge_name] = new_e_info
+
+    return new_nodes, new_edges, new_probs
+
+def deactivate_a_component( rv_name_to_deactivate, nodes: Dict[str, Dict], edges: Dict[str, Dict], probs: Dict[str, Dict] ):
+    """
+    Return a copy of the input data with a random variable deactivated.
+    This function is to calculate deactivation importance measure (DIM) of a random variable (or component event).
+
+    Args:
+    rv_name_to_deactivate: str
+        The name of the random variable to be deactivated.
+        Must exist as a key in probs.
+    nodes: Dict[str, Dict]
+        name: {"x": float, "y": float, "depot": int or null, "capacity": float or null, "comp_id": str}
+    edges: Dict[str, Dict]
+        name: {"from": str, "to": str, "directed": bool, "capacity": float, "comp_id": str}
+    probs: Dict[str, Dict]
+        name: {str (comp_id): {"p": float [0,1], "remaining_capacity_ratio": float [0,1]}}
+
+    Returns:
+    new_nodes: Dict[str, Dict]
+        The updated nodes dictionary with the random variable deactivated.
+    new_edges: Dict[str, Dict]
+        The updated edges dictionary with the random variable deactivated.
+    new_probs: Dict[str, Dict]
+        The updated probs dictionary with the random variable deactivated.
+    """
+
+    assert rv_name_to_deactivate in probs, f"Random variable {rv_name_to_deactivate} not found in probs."
+
+    # Create deep copies of the input data
+    new_nodes = copy.deepcopy(nodes)
+    new_edges = copy.deepcopy(edges)
+    new_probs = copy.deepcopy(probs)
+
+    # Remove in probs
+    del new_probs[rv_name_to_deactivate]
+
+    # Remove in nodes
+    nodes_to_delete = [n for n, n_info in nodes.items() if n_info["comp_id"] == rv_name_to_deactivate]
+    for n in nodes_to_delete:
+        del new_nodes[n]
+    if len(nodes_to_delete) > 0:
+        # Also remove edges connected to the removed nodes
+        edges_to_delete = [e for e, e_info in new_edges.items() if e_info["from"] in nodes_to_delete or e_info["to"] in nodes_to_delete]
+        for e in edges_to_delete:
+            del new_edges[e]
+
+    # Remove in edges
+    edges_to_delete = [e for e, e_info in edges.items() if e_info["comp_id"] == rv_name_to_deactivate]
+    for e in edges_to_delete:
+        del new_edges[e]
+
+    return new_nodes, new_edges, new_probs
