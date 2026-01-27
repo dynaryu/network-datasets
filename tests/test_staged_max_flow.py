@@ -600,15 +600,14 @@ def test_deactivate_a_component1( load_toy_process_plant_dataset):
     )
 
     # Check the result
-    assert 'x1' not in new_probs
-    assert len(new_probs) == len(probs) - 1
+    assert new_probs == probs
 
     connected_edges = ['e1']
     for eid in connected_edges:
-        assert eid not in new_edges
-    assert len(new_edges) == len(edges) - len(connected_edges)
+        assert new_edges[eid]['capacity'] == 0.0
+    assert len(new_edges) == len(edges) 
 
-    assert 'n1' not in new_nodes 
+    assert new_nodes['n1']['capacity'] == 0.0   
 
 
     # Run staged max flow on the new system
@@ -637,10 +636,9 @@ def test_deactivate_a_component2( load_toy_process_plant_dataset ):
     )
 
     # Check the result
-    assert 'x11' not in new_probs
-    assert len(new_probs) == len(probs) - 1
+    assert new_probs == probs
 
-    assert 'e3' not in new_edges
+    assert new_edges["e3"]["capacity"] == 0.0
 
     assert nodes == new_nodes  # no node is removed
 

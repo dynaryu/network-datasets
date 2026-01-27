@@ -1,6 +1,6 @@
 [project]
 name = "ndtools-duco"
-version = "0.1.5"
+version = "0.1.6"
 requires-python = ">=3.9"
 license = "MIT"
 

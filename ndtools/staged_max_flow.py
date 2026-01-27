@@ -426,7 +426,7 @@ def deactivate_a_component( rv_name_to_deactivate, nodes: Dict[str, Dict], edges
     new_edges: Dict[str, Dict]
         The updated edges dictionary with the random variable deactivated.
     new_probs: Dict[str, Dict]
-        The updated probs dictionary with the random variable deactivated.
+        The updated probs dictionary (same as input).
     """
 
     assert rv_name_to_deactivate in probs, f"Random variable {rv_name_to_deactivate} not found in probs."
@@ -436,22 +436,19 @@ def deactivate_a_component( rv_name_to_deactivate, nodes: Dict[str, Dict], edges
     new_edges = copy.deepcopy(edges)
     new_probs = copy.deepcopy(probs)
 
-    # Remove in probs
-    del new_probs[rv_name_to_deactivate]
-
     # Remove in nodes
     nodes_to_delete = [n for n, n_info in nodes.items() if n_info["comp_id"] == rv_name_to_deactivate]
     for n in nodes_to_delete:
-        del new_nodes[n]
+        new_nodes[n]['capacity'] = 0.0
     if len(nodes_to_delete) > 0:
         # Also remove edges connected to the removed nodes
         edges_to_delete = [e for e, e_info in new_edges.items() if e_info["from"] in nodes_to_delete or e_info["to"] in nodes_to_delete]
         for e in edges_to_delete:
-            del new_edges[e]
+            new_edges[e]['capacity'] = 0.0
 
     # Remove in edges
     edges_to_delete = [e for e, e_info in edges.items() if e_info["comp_id"] == rv_name_to_deactivate]
     for e in edges_to_delete:
-        del new_edges[e]
+        new_edges[e]['capacity'] = 0.0
 
-    return new_nodes, new_edges, new_probs
+    return new_nodes, new_edges, probs
