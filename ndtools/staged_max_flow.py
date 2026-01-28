@@ -60,9 +60,9 @@ def eval_edge_caps( nodes: Dict[str, Dict], edges: Dict[str, Dict], probs: Dict[
 
             if e_info.get("capacity") is not None:
                 base_capacity = e_info["capacity"]
-                edge_caps_dict[(e_info["from"], e_info["to"])] = base_capacity * probs[comp_id][str(st)]['remaining_capacity_ratio']
+                edge_caps_dict[e] = base_capacity * probs[comp_id][str(st)]['remaining_capacity_ratio']
             else:
-                edge_caps_dict[(e_info["from"], e_info["to"])] = float('inf')
+                edge_caps_dict[e] = float('inf')
             
     # Evaluate edge capacities from n_caps_dict and edge_caps_dict
     # Minimum of the capacities of the two end nodes and the edge itself
@@ -73,7 +73,7 @@ def eval_edge_caps( nodes: Dict[str, Dict], edges: Dict[str, Dict], probs: Dict[
 
         node_cap_from = n_caps_dict.get(from_node, float('inf'))
         node_cap_to = n_caps_dict.get(to_node, float('inf'))
-        edge_cap = edge_caps_dict.get((from_node, to_node), float('inf'))
+        edge_cap = edge_caps_dict.get(e, float('inf'))
 
         e_caps[e] = min(node_cap_from, node_cap_to, edge_cap)        
 
