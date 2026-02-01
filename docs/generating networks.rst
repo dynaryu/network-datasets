@@ -147,6 +147,26 @@ Grid / Lattice (``grid`` or ``lattice``)
 ``cols`` (int)
   Number of grid columns.
 
+Example usage:
+
+.. code-block:: python
+
+   from pathlib import Path
+   from ndtools.network_generator import GenConfig, generate_and_save
+
+   cfg = ng.GenConfig(
+       name="grid_4x3",
+       generator="grid",
+       description="test grid",
+       generator_params={"rows": 4, "cols": 3, "p_fail": 0.1},
+       seed=None, # grid is deterministic
+   )
+   repo_root = Path(__file__).resolve().parents[1]
+   out_base = repo_root / "generated"
+
+   ds_root = generate_and_save(out_base, cfg, draw_graph=True)
+   print("Wrote:", ds_root)
+
 Erdős–Rényi (``erdos_renyi`` or ``er``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -155,6 +175,26 @@ Erdős–Rényi (``erdos_renyi`` or ``er``)
 
 ``p`` (float)
   Edge probability.
+
+Example usage:
+
+.. code-block:: python
+
+   from pathlib import Path
+   from ndtools.network_generator import GenConfig, generate_and_save
+
+   cfg = ng.GenConfig(
+       name="er_n20_p03",
+       generator="er",
+       description="test er",
+       generator_params={"n_nodes": 20, "p": 0.3, "p_fail": 0.1},
+       seed=7,
+   )
+   repo_root = Path(__file__).resolve().parents[1]
+   out_base = repo_root / "generated"
+
+   ds_root = generate_and_save(out_base, cfg, draw_graph=True)
+   print("Wrote:", ds_root)
 
 Watts–Strogatz (``watts_strogatz`` or ``ws``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -169,6 +209,26 @@ Watts–Strogatz (``watts_strogatz`` or ``ws``)
   Rewiring probability (β).
   Internally mapped to ``p_rewire`` for the underlying generator function.
 
+Example usage:
+
+.. code-block:: python
+
+   from pathlib import Path
+   from ndtools.network_generator import GenConfig, generate_and_save
+
+   cfg = ng.GenConfig(
+       name="ws_n60_k6_b015",
+       generator="ws",
+       description="test ws",
+       generator_params={"n_nodes": 60, "k": 6, "p_ws": 0.15, "p_fail": 0.1},
+       seed=7,
+   )
+   repo_root = Path(__file__).resolve().parents[1]
+   out_base = repo_root / "generated"
+
+   ds_root = generate_and_save(out_base, cfg, draw_graph=True)
+   print("Wrote:", ds_root)
+
 Barabási–Albert (``barabasi_albert`` or ``ba``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -177,6 +237,26 @@ Barabási–Albert (``barabasi_albert`` or ``ba``)
 
 ``m`` (int)
   Number of edges to attach from each new node to existing nodes.
+
+Example usage:
+
+.. code-block:: python
+
+   from pathlib import Path
+   from ndtools.network_generator import GenConfig, generate_and_save
+
+   cfg = ng.GenConfig(
+       name="ba_n60_m3",
+       generator="ba",
+       description="test ba",
+       generator_params={"n_nodes": 60, "m": 3, "p_fail": 0.1},
+       seed=7,
+   )
+   repo_root = Path(__file__).resolve().parents[1]
+   out_base = repo_root / "generated"
+
+   ds_root = generate_and_save(out_base, cfg, draw_graph=True)
+   print("Wrote:", ds_root)
 
 Configuration model (``configuration`` or ``config``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -187,6 +267,26 @@ Configuration model (``configuration`` or ``config``)
 ``avg_deg`` (float)
   Target average degree.
 
+Example usage:
+
+.. code-block:: python
+
+   from pathlib import Path
+   from ndtools.network_generator import GenConfig, generate_and_save
+
+   cfg = ng.GenConfig(
+       name="config_n60_deg3p2",
+       generator="config",
+       description="test config",
+       generator_params={"n_nodes": 60, "avg_deg": 3.2, "p_fail": 0.1},
+       seed=7,
+   )
+   repo_root = Path(__file__).resolve().parents[1]
+   out_base = repo_root / "generated"
+
+   ds_root = generate_and_save(out_base, cfg, draw_graph=True)
+   print("Wrote:", ds_root)
+
 Random Geometric (``random_geometric`` or ``rg``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -195,6 +295,26 @@ Random Geometric (``random_geometric`` or ``rg``)
 
 ``radius`` (float)
   Connection radius (typically in ``[0, 1]`` depending on your implementation).
+
+Example usage:
+
+.. code-block:: python
+
+   from pathlib import Path
+   from ndtools.network_generator import GenConfig, generate_and_save
+
+   cfg = ng.GenConfig(
+       name="rg_n60_r017",
+       generator="rg",
+       description="test rg",
+       generator_params={"n_nodes": 60, "radius": 0.17, "p_fail": 0.1},
+       seed=7,
+   )
+   repo_root = Path(__file__).resolve().parents[1]
+   out_base = repo_root / "generated"
+
+   ds_root = generate_and_save(out_base, cfg, draw_graph=True)
+   print("Wrote:", ds_root)
 
 Pipeline options (not network-specific)
 ---------------------------------------
