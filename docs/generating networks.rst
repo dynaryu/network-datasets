@@ -24,9 +24,8 @@ You can call the generator from ndtools:
    )
    repo_root = Path(__file__).resolve().parents[1]
    out_base = repo_root / "generated"
-   schema_dir = repo_root / "schema"
 
-   ds_root = generate_and_save(out_base, schema_dir, cfg, draw_graph=True)
+   ds_root = generate_and_save(out_base, cfg, draw_graph=True)
    print("Wrote:", ds_root)
 
 Available Network Types
