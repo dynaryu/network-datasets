@@ -518,12 +518,26 @@ def eval_1od_connectivity(
     if not H.has_node(orig_node) or not H.has_node(dest_node):
         return 0, {"reason": "origin_or_destination_missing_in_filtered"}
 
-    connected = nx.has_path(H, orig_node, dest_node)
+    try:
+        path_nodes = nx.shortest_path(H, orig_node, dest_node)
+        connected = True
+    except nx.NetworkXNoPath:
+        path_nodes = None
+        connected = False
+
+    # Get the path edges and nodes
+    if path_nodes is not None:
+        path_eids = [
+            H.edges[u, v]["eid"]
+            for u, v in zip(path_nodes[:-1], path_nodes[1:])
+        ]
+    else:
+        path_eids = None
+
 
     info = {
         "connected": connected,
-        "kept_edges": kept_edges,
-        "skipped_no_eid": skipped_no_eid,
-        "num_nodes_off": len(node_off),
+        "path_nodes": path_nodes,
+        "path_edge_ids": path_eids
     }
     return ("connected" if connected else "disconnected"), (1 if connected else 0), info

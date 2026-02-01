@@ -344,10 +344,18 @@ def test_eval_1od_connectivity1():
     destinations = 'n8'
 
     _, sys_st, info = fun_binary_graph.eval_1od_connectivity(
-        comps_st, G_base, origin, destinations
-    )
+        comps_st, G_base, origin, destinations) 
+
+    path_nodes_cands = [['n1', 'n2', 'n6', 'n8'],
+                        ['n1', 'n4', 'n6', 'n8'],
+                        ['n1', 'n4', 'n7', 'n8']]
+    path_eids_cands = [['e01', 'e05', 'e10'],
+                       ['e03', 'e06', 'e10'],
+                       ['e03', 'e07', 'e11']]
 
     assert sys_st == 1, f"Expected system state 1, got '{sys_st}'"
+    assert info['path_nodes'] in path_nodes_cands, f"Got {info['path_nodes']}"
+    assert info['path_edge_ids'] in path_eids_cands, f"Got {info['path_edge_ids']}"
 
 def test_eval_1od_connectivity2():
     nodes, edges, probs = load_dataset_any("datasets/toynet_11edges/v1/data")
@@ -363,7 +371,12 @@ def test_eval_1od_connectivity2():
         comps_st, G_base, origin, destinations
     )
 
+    path_nodes_expected = ['n1', 'n2', 'n6', 'n8']
+    path_eids_expected = ['e01', 'e05', 'e10']
+
     assert sys_st == 1, f"Expected system state 1, got '{sys_st}'"
+    assert info['path_nodes'] == path_nodes_expected, f"Expected path_nodes {path_nodes_expected}, got {info['path_nodes']}"
+    assert info['path_edge_ids'] == path_eids_expected, f"Expected path_edge_ids {path_eids_expected}, got {info['path_edge_ids']}"
 
 def test_eval_1od_connectivity3():
     nodes, edges, probs = load_dataset_any("datasets/toynet_11edges/v1/data")
@@ -380,3 +393,5 @@ def test_eval_1od_connectivity3():
     )
 
     assert sys_st == 0, f"Expected system state 1, got '{sys_st}'"
+    assert info['path_nodes'] == None, f"Expected path_nodes None, got {info['path_nodes']}"
+    assert info['path_edge_ids'] == None, f"Expected path_edge_ids None, got {info['path_edge_ids']}"
