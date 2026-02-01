@@ -334,3 +334,49 @@ def test_eval_population_accessibility5():
 
     assert np.isclose(connected_ratio, 1.0), f"Expected connected_ratio 1.0, got {connected_ratio}"
     assert sys_st == 2, f"Expected system state 2, got '{sys_st}'"
+
+def test_eval_1od_connectivity1():
+    nodes, edges, probs = load_dataset_any("datasets/toynet_11edges/v1/data")
+    G_base = build_base_graph(nodes, edges)
+
+    comps_st = {eid: 1 for eid in edges}  # all components survive
+    origin = 'n1'
+    destinations = 'n8'
+
+    _, sys_st, info = fun_binary_graph.eval_1od_connectivity(
+        comps_st, G_base, origin, destinations
+    )
+
+    assert sys_st == 1, f"Expected system state 1, got '{sys_st}'"
+
+def test_eval_1od_connectivity2():
+    nodes, edges, probs = load_dataset_any("datasets/toynet_11edges/v1/data")
+    G_base = build_base_graph(nodes, edges)
+
+    comps_st = {eid: 1 for eid in edges}  
+    comps_st['e03'] = 0  # failed components
+
+    origin = 'n1'
+    destinations = 'n8'
+
+    _, sys_st, info = fun_binary_graph.eval_1od_connectivity(
+        comps_st, G_base, origin, destinations
+    )
+
+    assert sys_st == 1, f"Expected system state 1, got '{sys_st}'"
+
+def test_eval_1od_connectivity3():
+    nodes, edges, probs = load_dataset_any("datasets/toynet_11edges/v1/data")
+    G_base = build_base_graph(nodes, edges)
+
+    comps_st = {eid: 1 for eid in edges}  
+    comps_st['e01'], comps_st['e02'], comps_st['e03'] = 0, 0, 0  # failed components
+
+    origin = 'n1'
+    destinations = 'n8'
+
+    _, sys_st, info = fun_binary_graph.eval_1od_connectivity(
+        comps_st, G_base, origin, destinations
+    )
+
+    assert sys_st == 0, f"Expected system state 1, got '{sys_st}'"

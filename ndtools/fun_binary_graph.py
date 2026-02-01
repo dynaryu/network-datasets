@@ -141,6 +141,17 @@ def eval_travel_time_to_nearest(
     target_max: float | list = 0.5,        # allowed extra time over baseline, in HOURS
     length_attr: str = "length",    # edge length attribute (e.g., km)
 ) -> Tuple[Optional[float], int, Dict[str, Any]]:
+    """
+    Evalute the shortest time from a specified origin to the nearest destination node
+    under binary component states.
+
+    A node is considered REACHABLE if:
+        t_filtered(origin) <= t_baseline(origin) + target_max
+    System state:
+        1 if reachable else 0
+    Returns:
+        travel_time_filtered (float or None), system state (int), info (diagnostics dictionary)
+    """
     dest_set = set(destinations)
     if not dest_set:
         return None, 0, {"reason": "no destinations provided"}
@@ -450,3 +461,69 @@ def eval_population_accessibility(
 
     return connected_ratio, system_state, info
 
+def eval_1od_connectivity(
+    comps_st: Dict[str, int],
+    G: nx.Graph,
+    orig_node: str,
+    dest_node: str,
+    *,
+    edge_id_attr: str = "eid",
+) -> Tuple[str, int, Dict[str, Any]]:
+    """
+    Apply component states to G and check connectivity of a single origin-destination pair.
+
+    The node is considered CONNECTED if there exists a path from orig_node to dest_node.
+
+    System state:
+        1 if path exists else 0
+
+    Returns:
+      ('disconnected' or 'connected', 0 or 1, info dict)
+    """
+    # --- node/edge states interpreted the same way as your original function ---
+    node_off = {cid for cid, st in comps_st.items() if st == 0 and cid in G.nodes}
+    edge_on  = {cid for cid, st in comps_st.items() if st == 1}
+
+    # quick failures
+    if orig_node in node_off or dest_node in node_off:
+        return 0, {"reason": "origin_or_destination_off", "node_off": True}
+
+    if not G.has_node(orig_node) or not G.has_node(dest_node):
+        return 0, {"reason": "origin_or_destination_missing_in_base"}
+
+    # --- build filtered graph ---
+    H = G.__class__()
+    H.add_nodes_from(G.nodes(data=True))
+
+    kept_edges = 0
+    skipped_no_eid = 0
+
+    for u, v, data in G.edges(data=True):
+        # drop edges incident to removed nodes
+        if u in node_off or v in node_off:
+            continue
+
+        eid = data.get(edge_id_attr)
+        if eid is None:
+            skipped_no_eid += 1
+            continue
+
+        # keep only "on" edges
+        if eid in edge_on:
+            H.add_edge(u, v, **data)
+            kept_edges += 1
+
+    # If origin/destination got isolated, has_path will return False anyway,
+    # but keeping this check makes the reason clearer.
+    if not H.has_node(orig_node) or not H.has_node(dest_node):
+        return 0, {"reason": "origin_or_destination_missing_in_filtered"}
+
+    connected = nx.has_path(H, orig_node, dest_node)
+
+    info = {
+        "connected": connected,
+        "kept_edges": kept_edges,
+        "skipped_no_eid": skipped_no_eid,
+        "num_nodes_off": len(node_off),
+    }
+    return ("connected" if connected else "disconnected"), (1 if connected else 0), info
