@@ -328,8 +328,8 @@ def sys_fun(comps_st: Dict[str, int], nodes: Dict[str, Dict], edges: Dict[str, D
     flow = result.x[-1]
     if flow >= target_flow - 1e-12:
         sys_st = 's'
-        #min_comp_state = get_min_surv_comps_st(result, nodes, edges, probs) # TODO: the function doesn't run correctly
-        min_comp_state = None               
+        min_comp_state = get_min_surv_comps_st(result, nodes, edges, probs) # TODO: the function doesn't run correctly
+        #min_comp_state = None               
 
     else:
         sys_st = 'f'
